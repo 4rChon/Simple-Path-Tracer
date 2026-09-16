@@ -107,21 +107,21 @@ void Tracer::tone_map_linear()
 {
     glm::vec3 max_colour = Util::max_colour(framebuffer_);
     for (auto& pixel : framebuffer_) {
-        pixel.colour = 255.F * (pixel.colour / max_colour);
+        pixel.colour = 255.f * (pixel.colour / max_colour);
     }
 }
 
 void Tracer::tone_map_sigmoid()
 {
     for (auto& pixel : framebuffer_) {
-        pixel.colour = 255.F * (pixel.colour / (1.F + pixel.colour));
+        pixel.colour = 255.f * (pixel.colour / (1.f + pixel.colour));
     }
 }
 
 void Tracer::tone_map_depth()
 {
     for (auto& pixel : framebuffer_) {
-        pixel.depth = 255.F * (1.F - (pixel.depth / (1.F + pixel.depth)));
+        pixel.depth = 255.f * (1.f - (pixel.depth / (1.f + pixel.depth)));
     }
 }
 
