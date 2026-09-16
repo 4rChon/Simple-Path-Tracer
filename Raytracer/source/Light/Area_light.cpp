@@ -3,26 +3,26 @@
 #include <glm/vec3.hpp>
 #include <numbers>
 #include <vector>
+
 #include "Area_light.h"
 #include "ILight.h"
 #include "IShape.h"
 #include "Sphere.h"
 
 namespace Raytracer {
-Area_light::Area_light(IShape& shape, const glm::vec3& L_e_)
-    : shape_(&shape), ILight(L_e_)
+AreaLight::AreaLight(IShape& shape, const glm::vec3& L_e_) : shape_(&shape), ILight(L_e_)
 {
 }
 
-Area_light::~Area_light() {}
+AreaLight::~AreaLight() {}
 
-glm::vec3 Area_light::sample_L(const glm::vec3&, Light_sample&)
+glm::vec3 AreaLight::sample_L(const glm::vec3&, Light_sample&)
 {
     throw "Not implemented.";
 }
 
-glm::vec3 Area_light::sample_L(const std::vector<float>& xi, const glm::vec3& P,
-                               Light_sample& light_sample)
+glm::vec3 AreaLight::sample_L(const std::vector<float>& xi, const glm::vec3& P,
+                              Light_sample& light_sample)
 {
     glm::vec3 surface_normal = shape_->surface_normal(P);
     glm::vec3 surface_point =

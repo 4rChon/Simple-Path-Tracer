@@ -1,18 +1,30 @@
+#include <algorithm>
+#include <array>
 #include <fstream>
+#include <glm/vec3.hpp>
+#include <iostream>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
 #include "Ad_hoc_material.h"
 #include "Area_light.h"
+#include "BxDF.h"
 #include "Camera.h"
 #include "Emissive_primitive.h"
 #include "Geometric_primitive.h"
+#include "ILight.h"
+#include "IMaterial.h"
+#include "IShape.h"
 #include "json.h"
 #include "Lens_camera.h"
 #include "Path_tracer.h"
 #include "Pinhole_camera.h"
 #include "Point_light.h"
+#include "Sampler.h"
+#include "Scene.h"
 #include "Sphere.h"
 #include "Tracer.h"
 #include "util.h"
@@ -89,7 +101,8 @@ std::unordered_map<std::string, Camera*> init_cameras(const json& document)
         const glm::vec3 target = parse_vec3(camera.at("target"));
 
         if (type == "pinhole") {
-            Camera* camera_entity = new Pinhole_camera(fov, aspect, distance, position, target);
+            Camera* camera_entity =
+                new PinholeCamera(fov, aspect, distance, position, target);
 
             scene_cameras.emplace(id, camera_entity);
         }
@@ -98,7 +111,8 @@ std::unordered_map<std::string, Camera*> init_cameras(const json& document)
 
             const float alpha = camera.at("alpha").get<float>();
 
-            Camera* camera_entity = new Lens_camera(fov, aspect, distance, position, target, fp, alpha);
+            Camera* camera_entity =
+                new LensCamera(fov, aspect, distance, position, target, fp, alpha);
 
             scene_cameras.emplace(id, camera_entity);
         }
@@ -118,11 +132,9 @@ std::unordered_map<std::string, IMaterial*> init_materials(const json& document)
 
     for (const auto& json_material : materials) {
         const std::string id = json_material.at("id").get<std::string>();
-
         const std::string types = json_material.at("type").get<std::string>();
 
-        std::vector<std::string> type_list;
-        Util::split(types, " ", type_list);
+        std::vector<std::string> type_list = Util::split(types, " ");
 
         int material_type = 0;
 
@@ -165,7 +177,8 @@ std::unordered_map<std::string, IMaterial*> init_materials(const json& document)
             throw std::runtime_error("Unknown material type: " + types);
         }
 
-        IMaterial* material = new Ad_hoc_material(material_type, rho_d, rho_r, rho_t, beta, eta);
+        IMaterial* material =
+            new AdHocMaterial(material_type, rho_d, rho_r, rho_t, beta, eta);
 
         scene_materials.emplace(id, material);
     }
@@ -217,7 +230,7 @@ std::unordered_map<std::string, ILight*> init_lights(const json& document)
         if (type == "point") {
             const glm::vec3 position = parse_vec3(light.at("position"));
 
-            ILight* light_entity = new Point_light(position, power);
+            ILight* light_entity = new PointLight(position, power);
 
             scene_lights.emplace(id, light_entity);
         }
@@ -228,7 +241,7 @@ std::unordered_map<std::string, ILight*> init_lights(const json& document)
 
             assert_exists(shapes, shape_id.c_str(), "shape");
 
-            ILight* light_entity = new Area_light(*shapes.at(shape_id), power);
+            ILight* light_entity = new AreaLight(*shapes.at(shape_id), power);
 
             scene_lights.emplace(id, light_entity);
         }
@@ -270,7 +283,8 @@ Scene* get_scene(const json& document)
         assert_exists(materials, material_id.c_str(), "material");
 
         if (type == "geometric") {
-            auto* p = new Geometric_primitive(*shapes.at(shape_id), *materials.at(material_id));
+            auto* p =
+                new GeometricPrimitive(*shapes.at(shape_id), *materials.at(material_id));
 
             scene->add_primitive(*p);
         }
@@ -279,7 +293,8 @@ Scene* get_scene(const json& document)
 
             assert_exists(lights, light_id.c_str(), "light");
 
-            auto* p = new Emissive_primitive(*shapes.at(shape_id), *materials.at(material_id), *lights.at(light_id));
+            auto* p = new EmissivePrimitive(
+                *shapes.at(shape_id), *materials.at(material_id), *lights.at(light_id));
 
             scene->add_primitive(*p);
         }
@@ -337,7 +352,8 @@ Tracer* get_renderer(const json& document)
         throw std::runtime_error("Renderer dimensions must contain exactly 2 values");
     }
 
-    std::array<unsigned int, 2> dimensions{json_dims.at(0).get<unsigned int>(), json_dims.at(1).get<unsigned int>()};
+    std::array<unsigned int, 2> dimensions{json_dims.at(0).get<unsigned int>(),
+                                           json_dims.at(1).get<unsigned int>()};
 
     int depth = renderer.at("depth").get<int>();
     depth = std::min(depth, 20);

@@ -1,7 +1,8 @@
-#include "Distributed_tracer.h"
-
 #include <array>
+#include <cstdlib>
+#include <vector>
 #include "Ad_hoc_material.h"
+#include "Distributed_tracer.h"
 #include "glm/vec3.hpp"
 #include "Ray.h"
 #include "Sampler.h"
@@ -12,18 +13,20 @@
 #include "util.h"
 
 namespace Raytracer {
-DistributedTracer::DistributedTracer(const std::array<unsigned int, 2> dimensions, const unsigned int depth)
+DistributedTracer::DistributedTracer(const std::array<unsigned int, 2> dimensions,
+                                     const unsigned int depth)
     : Tracer(dimensions, depth)
 {
 }
 
 DistributedTracer::~DistributedTracer() {}
 
-glm::vec3 DistributedTracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const unsigned int depth)
+glm::vec3 DistributedTracer::trace(Scene& scene, Ray& ray, Sampler& sampler,
+                                   const unsigned int depth)
 {
     Ray r;
     Intersection i;
-    Ad_hoc_material* material;
+    AdHocMaterial* material;
     float pdf;
     glm::vec3 L_d(0.f), L_r(0.f), L_t(0.f), brdf, wi, wo;
 
@@ -35,11 +38,12 @@ glm::vec3 DistributedTracer::trace(Scene& scene, Ray& ray, Sampler& sampler, con
         }
 
         // Compute direct lighting (N=g_drt_samples_shadow);
-        L_d += scene.compute_direct(Shader::stochastic_shader, sampler, i, shadow_samples_);
+        L_d +=
+            scene.compute_direct(Shader::stochastic_shader, sampler, i, shadow_samples_);
 
         // Compute indirect lighting
         if (depth > 0) {
-            material = (Ad_hoc_material*)i.material;
+            material = (AdHocMaterial*)i.material;
             wo = -ray.direction_;
 
             float fresnel = 1.f;
@@ -57,7 +61,8 @@ glm::vec3 DistributedTracer::trace(Scene& scene, Ray& ray, Sampler& sampler, con
                 if (pdf >= clip_min_epsilon && !Spectrum::is_black(brdf)) {
                     r.set(i.P + wi * clip_min_epsilon, wi);
                     float cos_theta = abs(glm::dot(wi, i.shading_ONB.W));
-                    L_r += fresnel * cos_theta * brdf * trace(scene, r, sampler, depth - 1);
+                    L_r +=
+                        fresnel * cos_theta * brdf * trace(scene, r, sampler, depth - 1);
                 }
             }
             L_r /= reflection_samples_;

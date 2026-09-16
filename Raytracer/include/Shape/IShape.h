@@ -1,13 +1,12 @@
 #pragma once
+
+#include <glm/vec3.hpp>
 #include <vector>
-
-#include "Ray.h"
 #include "Intersection.h"
+#include "Ray.h"
 
-namespace Raytracer
-{
-  class IShape
-  {
+namespace Raytracer {
+class IShape {
   public:
     IShape();
     virtual ~IShape() = 0;
@@ -24,5 +23,5 @@ namespace Raytracer
     virtual float get_projected_area() const = 0;
     // Get point normal
     virtual glm::vec3 surface_normal(const glm::vec3& point) const = 0;
-  };
-}
+};
+} // namespace Raytracer

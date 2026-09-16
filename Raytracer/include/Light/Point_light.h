@@ -1,22 +1,23 @@
 #pragma once
-#include "ILight.h"
-#include <glm/gtx/norm.hpp>
 
-namespace Raytracer
-{
-  class Point_light
-    : public ILight
-  {
+#include <glm/vec3.hpp>
+#include "ILight.h"
+
+namespace Raytracer {
+class PointLight : public ILight {
   private:
     glm::vec3 position_;
+
   public:
-    Point_light(const glm::vec3& position, const glm::vec3& L_e);
-    ~Point_light();
+    PointLight(const glm::vec3& position, const glm::vec3& L_e);
+    ~PointLight();
 
     glm::vec3 sample_L(const glm::vec3& P, Light_sample& light_sample) override;
-    glm::vec3 sample_L(const std::vector<float>& xi,
-                       const glm::vec3& P,
+    glm::vec3 sample_L(const std::vector<float>& xi, const glm::vec3& P,
                        Light_sample& light_sample) override;
-    bool is_delta() const override { return true; }
-  };
-}
+    bool is_delta() const override
+    {
+        return true;
+    }
+};
+} // namespace Raytracer

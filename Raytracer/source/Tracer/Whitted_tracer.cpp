@@ -1,6 +1,8 @@
 #include <array>
+#include <glm/vec3.hpp>
 #include "Ad_hoc_material.h"
-#include "glm/vec3.hpp"
+#include "BxDF.h"
+#include "Intersection.h"
 #include "Ray.h"
 #include "Sampler.h"
 #include "Scene.h"
@@ -10,19 +12,21 @@
 #include "Whitted_tracer.h"
 
 namespace Raytracer {
-Whitted_tracer::Whitted_tracer(const std::array<unsigned int, 2> dimensions, const unsigned int depth)
+Whitted_tracer::Whitted_tracer(const std::array<unsigned int, 2> dimensions,
+                               const unsigned int depth)
     : Tracer(dimensions, depth)
 {
 }
 
 Whitted_tracer::~Whitted_tracer() {}
 
-glm::vec3 Whitted_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const unsigned int depth)
+glm::vec3 Whitted_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler,
+                                const unsigned int depth)
 {
     Ray r;
     Intersection i;
     glm::vec3 i_D(0), i_S(0), i_T(0);
-    Ad_hoc_material* material;
+    AdHocMaterial* material;
 
     // Find closest point of intersection
     if (scene.find_intersection(ray, i)) {
@@ -30,7 +34,7 @@ glm::vec3 Whitted_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const 
         i_D = scene.compute_direct(Shader::whitted_shader, sampler, i);
         if (depth > 0) {
             // Get material at point of intersection
-            material = (Ad_hoc_material*)i.material;
+            material = (AdHocMaterial*)i.material;
             if (material->has_type(BxDF::Specular)) {
                 float eta = material->get_eta();
                 float fresnel = 1.F;
@@ -54,13 +58,16 @@ glm::vec3 Whitted_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const 
                 if (material->has_type(BxDF::Transmit)) {
                     // Is entering or exiting material?
                     if (normal_dot_incident < 0.F) {
-                        r.set(i.P, glm::normalize(glm::refract(ray.direction_, i.shading_ONB.W, eta)));
+                        r.set(i.P, glm::normalize(glm::refract(ray.direction_,
+                                                               i.shading_ONB.W, eta)));
                     }
                     else {
-                        r.set(i.P, glm::normalize(glm::refract(ray.direction_, -i.shading_ONB.W, eta)));
+                        r.set(i.P, glm::normalize(glm::refract(ray.direction_,
+                                                               -i.shading_ONB.W, eta)));
                     }
 
-                    i_T = (1 - fresnel) * trace(scene, r, sampler, depth - 1) * material->k_T;
+                    i_T = (1 - fresnel) * trace(scene, r, sampler, depth - 1) *
+                          material->k_T;
                 }
             }
         }

@@ -1,13 +1,13 @@
 #pragma once
+
+#include <glm/vec3.hpp>
 #include "Coordinate_frame.h"
 
-namespace Raytracer
-{
-  class IShape;
-  class IMaterial;
+namespace Raytracer {
+class IShape;
+class IMaterial;
 
-  struct Intersection
-  {
+struct Intersection {
   public:
     bool is_valid = true;
     bool has_light = false;
@@ -15,8 +15,8 @@ namespace Raytracer
     glm::vec3 L_e;
     glm::vec3 D;
     glm::vec3 P;
-    Coordinate_frame geometry_ONB;
-    Coordinate_frame shading_ONB;
+    CoordinateFrame geometry_ONB;
+    CoordinateFrame shading_ONB;
     IShape* shape;
     IMaterial* material;
 
@@ -27,5 +27,5 @@ namespace Raytracer
 
     // explicit assignment operator due to pointer members
     Intersection& operator=(const Intersection& rvalue);
-  };
-}
+};
+} // namespace Raytracer

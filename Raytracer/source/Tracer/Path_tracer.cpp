@@ -1,25 +1,31 @@
 #include <algorithm>
 #include <array>
+#include <cstdlib>
+#include <vector>
 #include "BxDF.h"
 #include "glm/vec3.hpp"
 #include "IMaterial.h"
+#include "Intersection.h"
 #include "Path_tracer.h"
 #include "Ray.h"
 #include "Sampler.h"
 #include "Scene.h"
 #include "shader.h"
+#include "Spectrum.h"
 #include "Tracer.h"
 #include "util.h"
 
 namespace Raytracer {
-Path_tracer::Path_tracer(const std::array<unsigned int, 2> dimensions, const unsigned int depth)
+Path_tracer::Path_tracer(const std::array<unsigned int, 2> dimensions,
+                         const unsigned int depth)
     : Tracer(dimensions, depth)
 {
 }
 
 Path_tracer::~Path_tracer() {}
 
-glm::vec3 Path_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const unsigned int depth)
+glm::vec3 Path_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler,
+                             const unsigned int depth)
 {
     Intersection i;
     IMaterial* material;
@@ -47,7 +53,9 @@ glm::vec3 Path_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const uns
             // lighting for non-specular materials
             specular_hit = material->has_type(BxDF::Specular);
             if (!specular_hit) {
-                L += scene.compute_direct_stochastic(Shader::stochastic_shader, sampler, i) * throughput;
+                L += scene.compute_direct_stochastic(Shader::stochastic_shader, sampler,
+                                                     i) *
+                     throughput;
             }
 
             // sampling of brdf requires a direction; also, brdf assumes all
@@ -83,7 +91,8 @@ glm::vec3 Path_tracer::trace(Scene& scene, Ray& ray, Sampler& sampler, const uns
                 brdf = material->sample_specular(xi, normal, surface_wo, surface_wi, pdf);
             }
             else {
-                brdf = material->sample_transmissive(xi, transmit_normal, surface_wo, eta, surface_wi, pdf);
+                brdf = material->sample_transmissive(xi, transmit_normal, surface_wo, eta,
+                                                     surface_wi, pdf);
             }
 
             if (pdf <= clip_min_epsilon || Spectrum::is_black(brdf)) {

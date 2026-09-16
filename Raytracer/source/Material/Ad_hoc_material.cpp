@@ -9,53 +9,52 @@
 
 namespace Raytracer {
 
-Ad_hoc_material::Ad_hoc_material(const unsigned int type)
-    : BxDF(type), k_D(0), k_S(0), k_T(0)
+AdHocMaterial::AdHocMaterial(const unsigned int type) : BxDF(type), k_D(0), k_S(0), k_T(0)
 {
 }
 
-Ad_hoc_material::Ad_hoc_material(const unsigned int type, const glm::vec3& diffuse,
-                                 const glm::vec3& specular, const glm::vec3& transmissive)
+AdHocMaterial::AdHocMaterial(const unsigned int type, const glm::vec3& diffuse,
+                             const glm::vec3& specular, const glm::vec3& transmissive)
     : BxDF(type), k_D(diffuse), k_S(specular), k_T(transmissive)
 {
 }
 
-Ad_hoc_material::Ad_hoc_material(const unsigned int type, const glm::vec3& diffuse,
-                                 const glm::vec3& specular, const glm::vec3& transmissive,
-                                 const float roughness)
+AdHocMaterial::AdHocMaterial(const unsigned int type, const glm::vec3& diffuse,
+                             const glm::vec3& specular, const glm::vec3& transmissive,
+                             const float roughness)
     : BxDF(type), k_D(diffuse), k_S(specular), k_T(transmissive), beta(roughness)
 {
 }
 
-Ad_hoc_material::Ad_hoc_material(const unsigned int type, const glm::vec3& diffuse,
-                                 const glm::vec3& specular, const glm::vec3& transmissive,
-                                 const float roughness, const float refractive_index)
+AdHocMaterial::AdHocMaterial(const unsigned int type, const glm::vec3& diffuse,
+                             const glm::vec3& specular, const glm::vec3& transmissive,
+                             const float roughness, const float refractive_index)
     : BxDF(type), k_D(diffuse), k_S(specular), k_T(transmissive), beta(roughness),
       eta(refractive_index)
 {
 }
 
-glm::vec3 Ad_hoc_material::diffuse_brdf(const glm::vec3&, const glm::vec3&,
-                                        const glm::vec3&) const
+glm::vec3 AdHocMaterial::diffuse_brdf(const glm::vec3&, const glm::vec3&,
+                                      const glm::vec3&) const
 {
     return has_type(BxDF::Diffuse) ? k_D / std::numbers::pi_v<float> : glm::vec3(0);
 }
 
-glm::vec3 Ad_hoc_material::specular_brdf(const glm::vec3&, const glm::vec3&,
-                                         const glm::vec3&) const
+glm::vec3 AdHocMaterial::specular_brdf(const glm::vec3&, const glm::vec3&,
+                                       const glm::vec3&) const
 {
     return has_type(BxDF::Reflect) ? k_S : glm::vec3(0);
 }
 
-glm::vec3 Ad_hoc_material::transmissive_brdf(const glm::vec3&, const glm::vec3&,
-                                             const glm::vec3&) const
+glm::vec3 AdHocMaterial::transmissive_brdf(const glm::vec3&, const glm::vec3&,
+                                           const glm::vec3&) const
 {
     return has_type(BxDF::Transmit) ? k_T : glm::vec3(0);
 }
 
-glm::vec3 Ad_hoc_material::sample_diffuse(const std::vector<float>& xi,
-                                          const glm::vec3& x, const glm::vec3& wo,
-                                          glm::vec3& wi_out, float& pdf_out) const
+glm::vec3 AdHocMaterial::sample_diffuse(const std::vector<float>& xi, const glm::vec3& x,
+                                        const glm::vec3& wo, glm::vec3& wi_out,
+                                        float& pdf_out) const
 {
     wi_out = Util::sample_cosine_weighted_hemisphere(xi[0], xi[1]);
 
@@ -70,9 +69,9 @@ glm::vec3 Ad_hoc_material::sample_diffuse(const std::vector<float>& xi,
 }
 
 // Change to sample reflective
-glm::vec3 Ad_hoc_material::sample_specular(const std::vector<float>& xi,
-                                           const glm::vec3& x, const glm::vec3& wo,
-                                           glm::vec3& wi_out, float& pdf_out) const
+glm::vec3 AdHocMaterial::sample_specular(const std::vector<float>& xi, const glm::vec3& x,
+                                         const glm::vec3& wo, glm::vec3& wi_out,
+                                         float& pdf_out) const
 {
     wi_out = -glm::reflect(wo, x);
 
@@ -87,10 +86,10 @@ glm::vec3 Ad_hoc_material::sample_specular(const std::vector<float>& xi,
     return specular_brdf(x, wo, wi_out); // *cos_n * abs(glm::dot(x, wi_out));
 }
 
-glm::vec3 Ad_hoc_material::sample_transmissive(const std::vector<float>& xi,
-                                               const glm::vec3& x, const glm::vec3& wo,
-                                               const float eta_sample, glm::vec3& wi_out,
-                                               float& pdf_out) const
+glm::vec3 AdHocMaterial::sample_transmissive(const std::vector<float>& xi,
+                                             const glm::vec3& x, const glm::vec3& wo,
+                                             const float eta_sample, glm::vec3& wi_out,
+                                             float& pdf_out) const
 {
     wi_out = -glm::refract(wo, x, eta_sample);
     if (beta != 0) {

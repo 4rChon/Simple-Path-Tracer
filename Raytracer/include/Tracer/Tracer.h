@@ -1,4 +1,5 @@
 #pragma once
+
 #include <array>
 #include <glm/vec3.hpp>
 #include <string>
@@ -23,7 +24,8 @@ class Tracer {
 
     std::vector<Pixel> render(Scene& scene, Camera& camera, Sampler& sampler);
 
-    virtual glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler, unsigned int depth) = 0;
+    virtual glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler,
+                            unsigned int depth) = 0;
 
     void render_depth_map(Scene& scene, Camera& camera);
     void tone_map_linear();

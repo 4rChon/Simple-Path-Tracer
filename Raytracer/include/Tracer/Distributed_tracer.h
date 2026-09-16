@@ -18,6 +18,7 @@ class DistributedTracer : public Tracer {
     DistributedTracer(std::array<unsigned int, 2> dimensions, unsigned int depth);
     ~DistributedTracer() override;
 
-    glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler, unsigned int depth) override;
+    glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler,
+                    unsigned int depth) override;
 };
 } // namespace Raytracer

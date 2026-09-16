@@ -13,6 +13,7 @@ class Path_tracer : public Tracer {
     Path_tracer(std::array<unsigned int, 2> dimensions, unsigned int depth);
     ~Path_tracer();
 
-    glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler, unsigned int depth) override;
+    glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler,
+                    unsigned int depth) override;
 };
 } // namespace Raytracer

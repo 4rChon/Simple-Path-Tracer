@@ -1,4 +1,5 @@
 #pragma once
+
 #include <array>
 #include "glm/ext/vector_float3.hpp"
 #include "Ray.h"
@@ -12,6 +13,7 @@ class Whitted_tracer : public Tracer {
     Whitted_tracer(std::array<unsigned int, 2> dimensions, unsigned int depth);
     ~Whitted_tracer() override;
 
-    glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler, unsigned int depth) override;
+    glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler,
+                    unsigned int depth) override;
 };
 } // namespace Raytracer

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <glm/vec3.hpp>
+#include <vector>
 #include "BxDF.h"
 
 namespace Raytracer {
-class Ad_hoc_material : public BxDF {
+class AdHocMaterial : public BxDF {
   public:
     const glm::vec3 k_D;
     const glm::vec3 k_S;
@@ -12,16 +13,16 @@ class Ad_hoc_material : public BxDF {
     const float beta = 0.f;
     const float eta = 0.f;
 
-    Ad_hoc_material(const unsigned int type);
+    AdHocMaterial(const unsigned int type);
 
-    Ad_hoc_material(const unsigned int type, const glm::vec3& diffuse,
+    AdHocMaterial(const unsigned int type, const glm::vec3& diffuse,
                     const glm::vec3& specular, const glm::vec3& transmissive);
 
-    Ad_hoc_material(const unsigned int type, const glm::vec3& diffuse,
+    AdHocMaterial(const unsigned int type, const glm::vec3& diffuse,
                     const glm::vec3& specular, const glm::vec3& transmissive,
                     const float roughness);
 
-    Ad_hoc_material(const unsigned int type, const glm::vec3& diffuse,
+    AdHocMaterial(const unsigned int type, const glm::vec3& diffuse,
                     const glm::vec3& specular, const glm::vec3& transmissive,
                     const float roughness, const float refractive_index);
 

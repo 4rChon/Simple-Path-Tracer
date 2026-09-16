@@ -1,24 +1,24 @@
 #pragma once
-#pragma once
+
+#include "ILight.h"
+#include "IMaterial.h"
+#include "Intersection.h"
 #include "IPrimitive.h"
 #include "IShape.h"
-#include "IMaterial.h"
-#include "ILight.h"
+#include "Ray.h"
 
-namespace Raytracer
-{
-  class Emissive_primitive
-    : public IPrimitive
-  {
+namespace Raytracer {
+class EmissivePrimitive : public IPrimitive {
   private:
     IShape* shape_;
     IMaterial* material_;
     ILight* light_;
+
   public:
-    Emissive_primitive(IShape& shape, IMaterial& material, ILight& light);
-    ~Emissive_primitive() override;
+    EmissivePrimitive(IShape& shape, IMaterial& material, ILight& light);
+    ~EmissivePrimitive() override;
 
     bool intersects(const Ray& ray, Intersection& i_out);
     bool intersects(const Ray& ray);
-  };
-}
+};
+} // namespace Raytracer

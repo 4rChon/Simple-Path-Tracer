@@ -1,11 +1,10 @@
 #include "Intersection.h"
 
-namespace Raytracer
-{
-  Intersection::Intersection() {}
+namespace Raytracer {
+Intersection::Intersection() {}
 
-  Intersection & Intersection::operator=(const Intersection& rvalue)
-  {
+Intersection& Intersection::operator=(const Intersection& rvalue)
+{
     this->is_valid = rvalue.is_valid;
     this->has_light = rvalue.has_light;
     this->distance = rvalue.distance;
@@ -18,5 +17,5 @@ namespace Raytracer
     this->material = rvalue.material;
 
     return *this;
-  }
 }
+} // namespace Raytracer

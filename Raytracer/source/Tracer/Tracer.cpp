@@ -2,14 +2,15 @@
 
 #include <array>
 #include <cstdio>
+#include <gflags/gflags.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <Intersection.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <Windows.h>
 #include "Camera.h"
-#include "gflags/gflags.h"
 #include "Pixel.h"
 #include "Ray.h"
 #include "Sampler.h"

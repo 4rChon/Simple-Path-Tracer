@@ -13,8 +13,7 @@
 #include "Scene.h"
 #include "Tracer.h"
 
-namespace Raytracer::Json
-{
+namespace Raytracer::Json {
 using json = nlohmann::json;
 
 json parse_json_document(const std::string& path);
@@ -32,7 +31,8 @@ Camera* get_camera(const json& document);
 Tracer* get_renderer(const json& document);
 
 template <typename T>
-void assert_exists(const std::unordered_map<std::string, T>& map, const char* key, const char* object_type)
+void assert_exists(const std::unordered_map<std::string, T>& map, const char* key,
+                   const char* object_type)
 {
     if (map.find(key) == map.end()) {
         std::cout << key << " is not a valid " << object_type << " object.\n";
