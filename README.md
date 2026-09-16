@@ -162,25 +162,25 @@ Renderers can be path tracers (PT) or ray tracers (WRT).
 ```
 
 ### Command Line Arguments
-```-batch```: Render all files in the specified ```load_path``` directory if true. Render single input file specified by ```input_file``` otherwise. Default: true
+```--batch```: Render all files in the specified ```load_path``` directory if true. Render single input file specified by ```input_file``` otherwise. Default: true
 
-```-load_path```: Relative folder containing scene definitions. Default: "./definitions/"
+```--load_path```: Relative folder containing scene definitions. Default: "./definitions/"
 
-```-save_path```: Relative save folder location. Default: "./renders/"
+```--save_path```: Relative save folder location. Default: "./renders/"
 
-```-input_file```: Name of definition file. Unused if ```batch``` is true. Default: "in.json"
+```--input_file```: Name of definition file. Unused if ```batch``` is true. Default: "in.json"
 
-```-output_file```: Name of output file. Unused if ```batch``` is true. Default: "out.ppm"
+```--output_file```: Name of output file. Unused if ```batch``` is true. Default: "out.ppm"
 
-```-tonemapper```: "sigmoid" or "linear" tonemapper. Default: "sigmoid"
+```--tonemapper```: "sigmoid" or "linear" tonemapper. Default: "sigmoid"
 
-```-progress```: Output X/Y progress updates every 1000 pixels where X is current pixel and Y is total number of pixels. Default: false
+```--progress```: Output X/Y progress updates every 1000 pixels where X is current pixel and Y is total number of pixels. Default: false
 
-```-stratified_sampling```: "uniform" or "stratified" sampling strategy. Default: "stratified"
+```--stratified_sampling```: "uniform" or "stratified" sampling strategy. Default: "stratified"
 
 ### Nuget Packages:
-glm, rapidjson
+glm 1.0.3, nlohmann.json 3.12.0
 
 ### Other Packages:
-gflags
+gflags 2.3.0
 
