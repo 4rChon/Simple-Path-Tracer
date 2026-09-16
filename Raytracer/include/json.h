@@ -31,6 +31,7 @@ std::unordered_map<std::string, ILight*> init_lights(const json& document);
 
 Scene* get_scene(const json& document);
 Sampler* get_sampler(const json& document);
+int get_spp(const json& document);
 Camera* get_camera(const json& document);
 Tracer* get_renderer(const json& document);
 

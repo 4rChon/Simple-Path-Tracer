@@ -119,10 +119,10 @@ int main(int argc, char* argv[])
         Raytracer::Scene* scene = Raytracer::Json::get_scene(document);
         Raytracer::Camera* camera = Raytracer::Json::get_camera(document);
         Raytracer::Tracer* tracer = Raytracer::Json::get_renderer(document);
-        Raytracer::Sampler* sampler = Raytracer::Json::get_sampler(document);
+        int spp = Raytracer::Json::get_spp(document);
 
         if (!FLAGS_depth_map) {
-            tracer->render(*scene, *camera, *sampler);
+            tracer->render(*scene, *camera, spp);
 
             if (FLAGS_tonemapper.compare("sigmoid") == 0) {
                 tracer->tone_map_sigmoid();
@@ -132,8 +132,7 @@ int main(int argc, char* argv[])
             }
             tracer->save(ppm_output_paths[i]);
         }
-
-        if (FLAGS_depth_map) {
+        else {
             tracer->render_depth_map(*scene, *camera);
             tracer->tone_map_depth();
             tracer->save_depth(fs::path(ppm_output_paths[i]));
@@ -144,7 +143,6 @@ int main(int argc, char* argv[])
 
         delete scene;
         delete camera;
-        delete sampler;
         delete tracer;
         ++i;
     }

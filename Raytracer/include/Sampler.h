@@ -17,6 +17,7 @@ class Sampler {
     std::uniform_real_distribution<> uniform_dist_real_;
     std::uniform_int_distribution<> uniform_dist_int_;
 
+    unsigned int seed_;
     float spp_root_;
 
     // Used to keep track of sample index in stratified sample
@@ -25,7 +26,7 @@ class Sampler {
 
   public:
     const unsigned int spp;
-    Sampler(const unsigned int spp);
+    Sampler(const unsigned int spp, const unsigned int seed);
     ~Sampler();
     float get_weight() const
     {

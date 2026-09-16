@@ -114,6 +114,10 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <OpenMPSupport>
+      </OpenMPSupport>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/openmp:llvm %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\packages\gflags\cmake-build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -149,12 +153,18 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <OpenMPSupport>
+      </OpenMPSupport>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/openmp:llvm %(AdditionalOptions)</AdditionalOptions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\packages\gflags\cmake-build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gflags_static.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

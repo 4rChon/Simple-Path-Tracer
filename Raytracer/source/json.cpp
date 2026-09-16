@@ -260,24 +260,18 @@ Scene* get_scene(const json& document)
     const auto& json_scene = document.at("scene");
 
     auto materials = init_materials(document);
-
     auto shapes = init_shapes(document);
-
     auto lights = init_lights(document);
 
     const auto& light_ids = get_element_array(json_scene, "lights");
-
     const auto& primitive_list = get_element_array(json_scene, "primitives");
 
     Scene* scene = new Scene();
 
     for (const auto& primitive : primitive_list) {
         const std::string id = primitive.at("id").get<std::string>();
-
         const std::string type = primitive.at("type").get<std::string>();
-
         const std::string shape_id = primitive.at("shape").get<std::string>();
-
         const std::string material_id = primitive.at("material").get<std::string>();
 
         assert_exists(shapes, shape_id.c_str(), "shape");
@@ -319,20 +313,23 @@ Scene* get_scene(const json& document)
 Sampler* get_sampler(const json& document)
 {
     const auto& json_scene = document.at("scene");
-
     const auto& renderer = json_scene.at("renderer");
-
     const int samples = renderer.at("samples").get<int>();
+    return new Sampler(samples, 0);
+}
 
-    return new Sampler(samples);
+int get_spp(const json& document)
+{
+    const auto& json_scene = document.at("scene");
+    const auto& renderer = json_scene.at("renderer");
+    const int samples = renderer.at("samples").get<int>();
+    return samples;
 }
 
 Camera* get_camera(const json& document)
 {
     const auto& json_scene = document.at("scene");
-
     auto cameras = init_cameras(document);
-
     const std::string camera_id = json_scene.at("camera").get<std::string>();
 
     assert_exists(cameras, camera_id.c_str(), "camera");
@@ -343,11 +340,8 @@ Camera* get_camera(const json& document)
 Tracer* get_renderer(const json& document)
 {
     const auto& json_scene = document.at("scene");
-
     const auto& renderer = json_scene.at("renderer");
-
     const std::string renderer_type = renderer.at("type").get<std::string>();
-
     const auto& json_dims = get_element_array(renderer, "dimensions");
 
     if (json_dims.size() != 2) {

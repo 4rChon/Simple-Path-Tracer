@@ -6,9 +6,10 @@
 #include "Sampler.h"
 
 namespace Raytracer {
-Sampler::Sampler(const unsigned int spp) : spp(spp)
+Sampler::Sampler(const unsigned int spp, const unsigned int seed_mod)
+    : spp(spp), seed_(seed_mod)
 {
-    gen_ = std::mt19937(rd_());
+    gen_ = std::mt19937(rd_() + seed_);
     spp_root_ = (float)sqrt(spp);
     for (auto i = 0; i < spp_root_; i++) {
         float min_jitter = (i / spp_root_);

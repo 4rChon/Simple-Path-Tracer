@@ -10,6 +10,7 @@
 #include <glm/vec3.hpp>
 #include <Intersection.h>
 #include <iostream>
+#include <omp_llvm.h>
 #include <stb_image_write.h>
 #include <stdexcept>
 #include <string>
@@ -45,37 +46,51 @@ Tracer::Tracer(const std::array<unsigned int, 2> dimensions, const unsigned int 
 
 Tracer::~Tracer() {}
 
-std::vector<Pixel> Tracer::render(Scene& scene, Camera& camera, Sampler& sampler)
+std::vector<Pixel> Tracer::render(Scene& scene, Camera& camera, int spp)
 {
     unsigned int step = 0;
     auto before = GetTickCount64();
-    for (auto& pixel : framebuffer_) {
-        auto L = glm::vec3(0); // Initial radiance
-        for (auto i = 0U; i < sampler.spp; i++) {
-            Raytracer::Sample spp_sample = FLAGS_stratified_sampling
-                                               ? sampler.next_stratified_sample()
-                                               : sampler.next_uniform_sample();
-            float xx = (float)(pixel.x + spp_sample.jitter.x) / (float)width_;
-            float yy = (float)(pixel.y + spp_sample.jitter.y) / (float)height_;
 
-            if (camera.get_type() == Camera::Pinhole) {
-                Ray ray = camera.get_ray(xx, yy);
-                L += trace(scene, ray, sampler, depth_) * sampler.get_weight();
-            }
-            else if (camera.get_type() == Camera::Lens) {
-                Raytracer::Sample dof_sample = sampler.next_uniform_sample();
-                Ray ray = camera.get_ray(xx, yy, dof_sample.jitter);
-                L += trace(scene, ray, sampler, depth_) * sampler.get_weight();
-            }
-            else {
-                throw "Invalid camera type.";
-            }
-        };
+#pragma omp parallel
+    {
+        const unsigned int tid = omp_get_thread_num();
+        Sampler sampler = Sampler(spp, tid);
 
-        pixel.colour = L;
+#pragma omp for
+        for (auto i = 0; i < framebuffer_.size(); i++) {
+            Pixel& pixel = framebuffer_[i];
+            glm::vec3 L{0.f};
+            for (auto sample = 0; sample < sampler.spp; sample++) {
+                Raytracer::Sample spp_sample = FLAGS_stratified_sampling
+                                                   ? sampler.next_stratified_sample()
+                                                   : sampler.next_uniform_sample();
+                float xx = (float)(pixel.x + spp_sample.jitter.x) / (float)width_;
+                float yy = (float)(pixel.y + spp_sample.jitter.y) / (float)height_;
 
-        if (FLAGS_progress && step++ % step_interval == 0) {
-            printf("%d/%d\n", step++, height_ * width_);
+                if (camera.get_type() == Camera::Pinhole) {
+                    Ray ray = camera.get_ray(xx, yy);
+                    L += trace(scene, ray, sampler, depth_) * sampler.get_weight();
+                }
+                else if (camera.get_type() == Camera::Lens) {
+                    Raytracer::Sample dof_sample = sampler.next_uniform_sample();
+                    Ray ray = camera.get_ray(xx, yy, dof_sample.jitter);
+                    L += trace(scene, ray, sampler, depth_) * sampler.get_weight();
+                }
+                else {
+                    throw "Invalid camera type.";
+                }
+            }
+
+            pixel.colour = L;
+
+            if (FLAGS_progress) {
+                unsigned int current_step;
+#pragma omp atomic capture
+                current_step = ++step;
+                if (current_step % step_interval == 0) {
+                    printf("%d/%d\n", current_step, height_ * width_);
+                }
+            }
         }
     }
 

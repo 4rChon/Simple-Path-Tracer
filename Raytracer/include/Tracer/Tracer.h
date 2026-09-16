@@ -25,7 +25,7 @@ class Tracer {
     Tracer(std::array<unsigned int, 2> dimensions, unsigned int depth);
     virtual ~Tracer() = 0;
 
-    std::vector<Pixel> render(Scene& scene, Camera& camera, Sampler& sampler);
+    std::vector<Pixel> render(Scene& scene, Camera& camera, int spp);
 
     virtual glm::vec3 trace(Scene& scene, Ray& ray, Sampler& sampler,
                             unsigned int depth) = 0;
