@@ -1,40 +1,42 @@
 #pragma once
-#include <unordered_map> // std::unordered_map
 
-#include <rapidjson/document.h>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/error/en.h>
-
+#include <cstdlib>
+#include <iostream>
+#include <nlohmann/json.hpp>
+#include <string>
+#include <unordered_map>
 #include "Camera.h"
+#include "ILight.h"
 #include "IMaterial.h"
 #include "IShape.h"
-#include "Tracer.h"
+#include "Sampler.h"
 #include "Scene.h"
+#include "Tracer.h"
 
-namespace Raytracer
+namespace Raytracer::Json
 {
-  namespace Json
-  {
-    rapidjson::Document parse_json_document(std::string path);
-    typedef rapidjson::GenericArray<false, rapidjson::GenericValue<rapidjson::UTF8<>>> json_array;
-    json_array get_element_array(rapidjson::Document& document, const char* element);
-    std::unordered_map<std::string, Camera*> init_cameras(rapidjson::Document& document);
-    std::unordered_map<std::string, IMaterial*> init_materials(rapidjson::Document& document);
-    std::unordered_map<std::string, IShape*> init_shapes(rapidjson::Document& document);
-    std::unordered_map<std::string, ILight*> init_lights(rapidjson::Document& document);
-    Scene* get_scene(rapidjson::Document& document);
-    Sampler* get_sampler(rapidjson::Document& document);
-    Camera* get_camera(rapidjson::Document& document);
-    Tracer* get_renderer(rapidjson::Document& document);
+using json = nlohmann::json;
 
-    template<typename T>
-    void assert_exists(std::unordered_map<std::string, T> map, const char* key, const char* object_type)
-    {
-      if (map.find(key) == map.end())
-      {
+json parse_json_document(const std::string& path);
+
+const json& get_element_array(const json& document, const char* element);
+
+std::unordered_map<std::string, Camera*> init_cameras(const json& document);
+std::unordered_map<std::string, IMaterial*> init_materials(const json& document);
+std::unordered_map<std::string, IShape*> init_shapes(const json& document);
+std::unordered_map<std::string, ILight*> init_lights(const json& document);
+
+Scene* get_scene(const json& document);
+Sampler* get_sampler(const json& document);
+Camera* get_camera(const json& document);
+Tracer* get_renderer(const json& document);
+
+template <typename T>
+void assert_exists(const std::unordered_map<std::string, T>& map, const char* key, const char* object_type)
+{
+    if (map.find(key) == map.end()) {
         std::cout << key << " is not a valid " << object_type << " object.\n";
-        exit(1);
-      }
+        std::exit(EXIT_FAILURE);
     }
-  }
 }
+} // namespace Raytracer::Json

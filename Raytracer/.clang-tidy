@@ -1,0 +1,30 @@
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  performance-*,
+  modernize-*,
+  readability-*,
+  -readability-identifier-length,
+  -modernize-use-trailing-return-type
+
+HeaderFilterRegex: '.*[\\/]Raytracer[\\/](include|source)[\\/].*'
+ExcludeHeaderFilterRegex: '.*[\\/]packages[\\/].*'
+SystemHeaders: false
+
+CheckOptions:
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.EnumCase: CamelCase
+
+  readability-identifier-naming.FunctionCase: lower_case
+  readability-identifier-naming.MethodCase: lower_case
+
+  readability-identifier-naming.VariableCase: lower_case
+  readability-identifier-naming.LocalVariableCase: lower_case
+  readability-identifier-naming.ParameterCase: lower_case
+
+  readability-identifier-naming.PrivateMemberCase: lower_case
+  readability-identifier-naming.PrivateMemberSuffix: _
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'

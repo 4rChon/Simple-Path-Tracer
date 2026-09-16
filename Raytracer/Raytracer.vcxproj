@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{2479B6D9-80A1-49B4-B899-BAF62CA01116}</ProjectGuid>
     <RootNamespace>Raytracer</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,13 +41,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -72,10 +72,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Tracer;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Shape;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Scene;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Primitive;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Material;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Light;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Camera;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include;$(IncludePath)</IncludePath>
     <SourcePath>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\source;$(SourcePath)</SourcePath>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <ClangTidyChecks />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Tracer;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Shape;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Scene;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Primitive;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Material;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Light;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include\Camera;C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\include;$(IncludePath)</IncludePath>
     <SourcePath>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\source;$(SourcePath)</SourcePath>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <ClangTidyChecks />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <SourcePath>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\Raytracer\source;$(SourcePath)</SourcePath>
@@ -101,15 +105,18 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\packages\gflags\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_HAS_ITERATOR_DEBUGGING=0;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Raytracer\include\Light;$(SolutionDir)Raytracer\include\Material;$(SolutionDir)Raytracer\include\Tracer;$(SolutionDir)Raytracer\include\Shape;$(SolutionDir)Raytracer\include\Primitive;$(SolutionDir)Raytracer\include\Scene;$(SolutionDir)Raytracer\include\Camera;$(SolutionDir)Raytracer\include;$(SolutionDir)packages\gflags\cmake-build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;_HAS_ITERATOR_DEBUGGING=0;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\packages\gflags\build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\packages\gflags\cmake-build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gflags_static.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -132,18 +139,21 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\packages\gflags\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Raytracer\include\Light;$(SolutionDir)Raytracer\include\Material;$(SolutionDir)Raytracer\include\Tracer;$(SolutionDir)Raytracer\include\Shape;$(SolutionDir)Raytracer\include\Primitive;$(SolutionDir)Raytracer\include\Scene;$(SolutionDir)Raytracer\include\Camera;$(SolutionDir)Raytracer\include;$(SolutionDir)packages\gflags\cmake-build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\bendb\Desktop\Desktop Files\School\Uni\M.Sc\CPS5124 - Computer Graphics\Raytracer\packages\gflags\build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\packages\gflags\cmake-build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gflags_static.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -178,6 +188,8 @@
     <ClCompile Include="source\util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".clang-format" />
+    <None Include=".clang-tidy" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -212,14 +224,14 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\rapidjson.temprelease.0.0.2.20\build\native\rapidjson.temprelease.targets" Condition="Exists('..\packages\rapidjson.temprelease.0.0.2.20\build\native\rapidjson.temprelease.targets')" />
-    <Import Project="..\packages\glm.0.9.9.500\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.9.500\build\native\glm.targets')" />
+    <Import Project="..\packages\glm.1.0.3\build\native\glm.targets" Condition="Exists('..\packages\glm.1.0.3\build\native\glm.targets')" />
+    <Import Project="..\packages\nlohmann.json.3.12.0\build\native\nlohmann.json.targets" Condition="Exists('..\packages\nlohmann.json.3.12.0\build\native\nlohmann.json.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\rapidjson.temprelease.0.0.2.20\build\native\rapidjson.temprelease.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rapidjson.temprelease.0.0.2.20\build\native\rapidjson.temprelease.targets'))" />
-    <Error Condition="!Exists('..\packages\glm.0.9.9.500\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.9.500\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\glm.1.0.3\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.1.0.3\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\nlohmann.json.3.12.0\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nlohmann.json.3.12.0\build\native\nlohmann.json.targets'))" />
   </Target>
 </Project>

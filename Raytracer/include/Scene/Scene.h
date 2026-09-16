@@ -25,7 +25,7 @@ namespace Raytracer
 
     bool is_occluded(const glm::vec3& x,
                      const glm::vec3& y,
-                     const float epsilon = EPSILON) const;
+                     const float epsilon = clip_min_epsilon) const;
 
     bool find_intersection(const Ray& ray, Intersection& i_out);
 

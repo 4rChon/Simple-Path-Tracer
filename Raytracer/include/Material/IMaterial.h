@@ -1,7 +1,8 @@
 #pragma once
-#include <vector>
 
+#include <vector>
 #include <glm/vec3.hpp>
+
 namespace Raytracer
 {
   class IMaterial

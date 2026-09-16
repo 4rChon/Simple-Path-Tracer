@@ -14,8 +14,8 @@ namespace Raytracer
 
   bool Sphere::intersects(const Ray& ray, Intersection& i_out)
   {
-    glm::vec3 PC = ray.O - C_;
-    float b = 2 * glm::dot(ray.D, PC);
+    glm::vec3 PC = ray.origin_ - C_;
+    float b = 2 * glm::dot(ray.direction_, PC);
     float c = glm::length2(PC) - r2_;
     float d = b * b - 4 * c; // Discriminant
     if (d > 0)  // Only interested in two point intersections
@@ -33,23 +33,21 @@ namespace Raytracer
       {
         i_out.shape = this; // Store this shape
         i_out.distance = t; // Distance from O to P
-        i_out.D = ray.D; // Direction D;
-        i_out.P = ray.O + t * ray.D; // Point P
+        i_out.D = ray.direction_; // Direction D;
+        i_out.P = ray.origin_ + t * ray.direction_; // Point P
         i_out.geometry_ONB.make(glm::normalize(i_out.P - C_)); // Surface orthonormal basis
         i_out.shading_ONB = i_out.geometry_ONB; // Shading ONB
         return i_out.is_valid = true; // Intersection is valid
       }
     }
-    else // No intersection
-    {
-      return i_out.is_valid = false;
-    }
+
+    return i_out.is_valid = false;
   }
 
   bool Sphere::intersects(const Ray& ray)
   {
-    glm::vec3 PC = ray.O - C_;
-    float b = 2 * glm::dot(ray.D, PC);
+    glm::vec3 PC = ray.origin_ - C_;
+    float b = 2 * glm::dot(ray.direction_, PC);
     float c = glm::length2(PC) - r2_;
     float d = b * b - 4 * c;
     if (d > 0)

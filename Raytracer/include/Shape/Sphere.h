@@ -23,12 +23,12 @@ namespace Raytracer
       return 4.f * (float)M_PI * r2_; 
     }
     
-    inline glm::vec3 Sphere::surface_normal(const glm::vec3& point) const
+    inline glm::vec3 surface_normal(const glm::vec3& point) const
     {
       return glm::normalize(point - C_);
     }
 
-    inline float Sphere::get_projected_area() const override
+    inline float get_projected_area() const override
     {
       return (float)M_PI * r2_;
     }

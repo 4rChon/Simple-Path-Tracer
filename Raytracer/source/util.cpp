@@ -13,7 +13,7 @@ namespace Raytracer
   {
     void split(const std::string& s, const char* delim, std::vector<std::string>& v)
     {
-      long l_size = s.length();
+      auto l_size = s.length();
       char* buffer = (char*)malloc(sizeof(char)*l_size);
       s.copy(buffer, l_size, 0);
       buffer[l_size] = '\0';
