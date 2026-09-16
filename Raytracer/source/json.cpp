@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <filesystem>
 #include <fstream>
 #include <glm/vec3.hpp>
 #include <iostream>
@@ -30,6 +31,8 @@
 #include "util.h"
 #include "Whitted_tracer.h"
 
+namespace fs = std::filesystem;
+
 namespace Raytracer::Json {
 namespace {
 glm::vec3 parse_vec3(const json& value)
@@ -42,14 +45,14 @@ glm::vec3 parse_vec3(const json& value)
 }
 } // namespace
 
-json parse_json_document(const std::string& path)
+json parse_json_document(const fs::path& path)
 {
     std::cout << "Parsing json file: " << path << '\n';
 
     std::ifstream file(path);
 
     if (!file) {
-        throw std::runtime_error("Could not open JSON file: " + path);
+        throw std::runtime_error("Could not open JSON file: " + path.string());
     }
 
     json document;
@@ -59,7 +62,6 @@ json parse_json_document(const std::string& path)
     }
     catch (const json::parse_error& e) {
         std::cerr << "JSON parse error: " << e.what() << '\n';
-
         throw;
     }
 

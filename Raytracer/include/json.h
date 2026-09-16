@@ -1,10 +1,12 @@
 #pragma once
 
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
+
 #include "Camera.h"
 #include "ILight.h"
 #include "IMaterial.h"
@@ -13,10 +15,12 @@
 #include "Scene.h"
 #include "Tracer.h"
 
+namespace fs = std::filesystem;
+
 namespace Raytracer::Json {
 using json = nlohmann::json;
 
-json parse_json_document(const std::string& path);
+json parse_json_document(const fs::path& path);
 
 const json& get_element_array(const json& document, const char* element);
 

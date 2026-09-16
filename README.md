@@ -170,13 +170,17 @@ Renderers can be path tracers (PT) or ray tracers (WRT).
 
 ```--input_file```: Name of definition file. Unused if ```batch``` is true. Default: "in.json"
 
-```--output_file```: Name of output file. Unused if ```batch``` is true. Default: "out.ppm"
+```--ppm_output_file```: Name of ppm output file. Unused if ```batch``` is true. Default: "out.ppm"
+
+```--jpg_output_file```: Name of jpg output file. Unused if ```batch``` is true. Default: "out.jpg"
 
 ```--tonemapper```: "sigmoid" or "linear" tonemapper. Default: "sigmoid"
 
 ```--progress```: Output X/Y progress updates every 1000 pixels where X is current pixel and Y is total number of pixels. Default: false
 
 ```--stratified_sampling```: "uniform" or "stratified" sampling strategy. Default: "stratified"
+
+```--draw```: "Draw result after tracing is complete. Default: true"
 
 ### Nuget Packages:
 glm 1.0.3, nlohmann.json 3.12.0
