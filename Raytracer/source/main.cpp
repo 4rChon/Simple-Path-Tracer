@@ -31,7 +31,7 @@ DEFINE_validator(input_file, &validate_input_file);
 
 DEFINE_string(ppm_output_file, "out.ppm", "Output filename");
 DEFINE_string(jpg_output_file, "out.jpg", "Output filename");
-DEFINE_bool(draw, false, "Draw result after tracing is complete (NYI)");
+DEFINE_bool(draw, false, "Draw result after tracing is complete");
 DEFINE_bool(depth_map, false, "Output a depth map instead of the coloured render");
 
 DEFINE_string(tonemapper, "sigmoid", "Tone mapper to use (sigmoid | linear");
