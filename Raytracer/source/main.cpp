@@ -29,7 +29,8 @@ DEFINE_validator(save_path, &validate_save_path);
 DEFINE_string(input_file, "in.json", "Input filename");
 DEFINE_validator(input_file, &validate_input_file);
 
-DEFINE_string(output_file, "out.ppm", "Output filename");
+DEFINE_string(ppm_output_file, "out.ppm", "Output filename");
+DEFINE_string(jpg_output_file, "out.jpg", "Output filename");
 DEFINE_bool(draw, false, "Draw result after tracing is complete (NYI)");
 DEFINE_bool(depth_map, false, "Output a depth map instead of the coloured render");
 
@@ -88,18 +89,26 @@ int main(int argc, char* argv[])
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
     std::vector<std::string> input_files;
-    std::vector<std::string> output_files;
+    std::vector<std::string> ppm_output_files;
+    std::vector<std::string> jpg_output_files;
+
     if (FLAGS_batch) {
         for (const auto& p : fs::directory_iterator(FLAGS_load_path)) {
             input_files.push_back(p.path().string());
-            fs::path save_file(p.path().filename());
-            save_file.replace_extension("ppm");
-            output_files.push_back(save_file.string());
+
+            fs::path ppm_save_file(p.path().filename());
+            ppm_save_file.replace_extension("ppm");
+            ppm_output_files.push_back(ppm_save_file.string());
+
+            fs::path jpg_save_file(p.path().filename());
+            jpg_save_file.replace_extension("jpg");
+            jpg_output_files.push_back(jpg_save_file.string());
         }
     }
     else {
         input_files.push_back(FLAGS_load_path + FLAGS_input_file);
-        output_files.push_back(FLAGS_output_file);
+        ppm_output_files.push_back(FLAGS_ppm_output_file);
+        jpg_output_files.push_back(FLAGS_jpg_output_file);
     }
 
     unsigned int i = 0;
@@ -119,16 +128,16 @@ int main(int argc, char* argv[])
             else if (FLAGS_tonemapper.compare("linear") == 0) {
                 tracer->tone_map_linear();
             }
-            tracer->save(FLAGS_save_path, output_files[i]);
+            tracer->save(fs::path(FLAGS_save_path) / fs::path(ppm_output_files[i]));
         }
 
         if (FLAGS_depth_map) {
             tracer->render_depth_map(*scene, *camera);
             tracer->tone_map_depth();
-            tracer->save_depth(FLAGS_save_path, output_files[i]);
+            tracer->save_depth(fs::path(FLAGS_save_path) / fs::path(ppm_output_files[i]));
         }
         if (FLAGS_draw) {
-            tracer->draw();
+            tracer->draw(fs::path(FLAGS_save_path) / fs::path(jpg_output_files[i]));
         }
 
         delete scene;

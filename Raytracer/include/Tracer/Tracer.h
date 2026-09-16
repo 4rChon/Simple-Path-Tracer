@@ -1,14 +1,17 @@
 #pragma once
 
 #include <array>
+#include <filesystem>
 #include <glm/vec3.hpp>
-#include <string>
 #include <vector>
+
 #include "Camera.h"
 #include "Pixel.h"
 #include "Ray.h"
 #include "Sampler.h"
 #include "Scene.h"
+
+namespace fs = std::filesystem;
 
 namespace Raytracer {
 class Tracer {
@@ -31,8 +34,8 @@ class Tracer {
     void tone_map_linear();
     void tone_map_sigmoid();
     void tone_map_depth();
-    void save(const std::string& path, const std::string& filename) const;
-    void save_depth(const std::string& path, const std::string& filename) const;
-    void draw() const;
+    void save(const fs::path& output) const;
+    void save_depth(const fs::path& output) const;
+    void draw(const fs::path& output) const;
 };
 } // namespace Raytracer

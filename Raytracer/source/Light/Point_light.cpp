@@ -23,8 +23,7 @@ glm::vec3 PointLight::sample_L(const glm::vec3& P, Light_sample& light_sample)
     return L_e_ / glm::length2(light_to_point);
 }
 
-glm::vec3 PointLight::sample_L(const std::vector<float>& xi, const glm::vec3& P,
-                               Light_sample& light_sample)
+glm::vec3 PointLight::sample_L(const std::vector<float>&, const glm::vec3&, Light_sample&)
 {
     throw "Not implemented.";
 }

@@ -1,15 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 
 #include <array>
 #include <cstdio>
+#include <filesystem>
+#include <fstream>
 #include <gflags/gflags.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <Intersection.h>
 #include <iostream>
+#include <stb_image_write.h>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <Windows.h>
+
 #include "Camera.h"
 #include "Pixel.h"
 #include "Ray.h"
@@ -21,6 +27,8 @@
 DEFINE_bool(progress, false, "Print progress every 1000 pixels");
 DEFINE_bool(stratified_sampling, true, "Use a stratified sampling strategy");
 DECLARE_bool(depth_map);
+
+namespace fs = std::filesystem;
 
 constexpr auto step_interval = 1000;
 
@@ -125,38 +133,76 @@ void Tracer::tone_map_depth()
     }
 }
 
-void Tracer::save(const std::string& path, const std::string& filename) const
+void Tracer::save(const std::filesystem::path& output) const
 {
-    std::string output = path + "/" + filename;
-    FILE* fp = fopen(output.c_str(), "wb+");
-    (void)fprintf(fp, "P6\n%d %d\n255\n", width_, height_);
+    std::ofstream file(output, std::ios::binary);
+
+    if (!file) {
+        throw std::runtime_error("Failed to open output file: " + output.string());
+    }
+    file << "P6\n"
+         << width_ << height_ << "\n"
+         << "255\n";
 
     for (const auto& pixel : framebuffer_) {
-        glm::vec3 colour = pixel.colour;
-        static std::array<unsigned char, 3> ppm_colour{
-            (unsigned char)colour.r, (unsigned char)colour.g, (unsigned char)colour.b};
-        (void)fwrite(ppm_colour.data(), 1, 3, fp);
+        const glm::vec3 colour = pixel.colour;
+
+        const std::array<unsigned char, 3> ppm_colour{
+            static_cast<unsigned char>(colour.r), static_cast<unsigned char>(colour.g),
+            static_cast<unsigned char>(colour.b)};
+
+        file.write(reinterpret_cast<const char*>(ppm_colour.data()),
+                   static_cast<std::streamsize>(ppm_colour.size()));
     }
 
-    (void)fclose(fp);
+    if (!file) {
+        throw std::runtime_error("Failed while writing output file: " + output.string());
+    }
 }
 
-void Tracer::save_depth(const std::string& path, const std::string& filename) const
+void Tracer::save_depth(const std::filesystem::path& output) const
 {
-    std::string output = path + "/depth_" + filename;
+    std::ofstream file(output, std::ios::binary);
 
-    FILE* fp = fopen(output.c_str(), "wb+");
-    (void)fprintf(fp, "P6\n%d %d\n255\n", width_, height_);
+    if (!file) {
+        throw std::runtime_error("Failed to open output file: " + output.string());
+    }
+
+    file << "P6\n"
+         << width_ << height_ << "\n"
+         << "255\n";
 
     for (const auto& pixel : framebuffer_) {
-        static std::array<unsigned char, 3> ppm_colour{(unsigned char)pixel.depth,
-                                                       (unsigned char)pixel.depth,
-                                                       (unsigned char)pixel.depth};
-        (void)fwrite(ppm_colour.data(), 1, 3, fp);
+        std::array<unsigned char, 3> ppm_colour{static_cast<unsigned char>(pixel.depth),
+                                                static_cast<unsigned char>(pixel.depth),
+                                                static_cast<unsigned char>(pixel.depth)};
+
+        file.write(reinterpret_cast<const char*>(ppm_colour.data()),
+                   static_cast<std::streamsize>(ppm_colour.size()));
     }
 
-    (void)fclose(fp);
+    if (!file) {
+        throw std::runtime_error("Failed while writing output file: " + output.string());
+    }
 }
 
-void Tracer::draw() const {}
+void Tracer::draw(const std::filesystem::path& output) const
+{
+    std::vector<unsigned char> image;
+    image.reserve(static_cast<std::size_t>(width_) * static_cast<std::size_t>(height_) *
+                  3);
+
+    for (const auto& pixel : framebuffer_) {
+        const glm::vec3 colour = pixel.colour;
+
+        image.push_back(static_cast<unsigned char>(colour.r));
+        image.push_back(static_cast<unsigned char>(colour.g));
+        image.push_back(static_cast<unsigned char>(colour.b));
+    }
+
+    if (stbi_write_jpg(output.string().c_str(), width_, height_, 3, image.data(), 90) ==
+        0) {
+        throw std::runtime_error("Failed to write JPEG: " + output.string());
+    }
+}
 } // namespace Raytracer
